@@ -1,0 +1,51 @@
+<idea-plugin>
+    <id>org.mtspark.MTJobSubmission</id>
+    <name>HDFS Ops and Spark Job Submission</name>
+    <vendor email="vishwesh.vinchurkar@gmail.com">Spark MT</vendor>
+
+    <description>
+        This plugin provides two main features. First, performing various HDFS operations directly from IntelliJ IDE. Second,
+        it allows to submit Spark jobs to Spark cluster via Apache Livy. For using this, the user needs to configure server
+        details in the IDE, i.e. the domain name, port number and authentication information for the user. The server details
+        are persisted in user's machine and are used to make API calls to the server. In the initial version, it supports token
+        based authentication.
+    </description>
+
+    <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <actions>
+        <group id="org.intellij.sdk.action.GroupedActions" text="Spark MT" popup="true">
+            <add-to-group group-id="MainMenu" anchor="before" relative-to-action="HelpMenu"/>
+            <action id="com.sparkmt.HDFSConfigurationAction"
+                    class="com.sparkmt.HDFSConfigurationAction"
+                    text="Configure HDFS Server"
+                    description="HDFS server configuration action"
+                    icon="/icons/webHdfs.svg"/>
+
+            <action id="com.sparkmt.SparkConfigurationAction"
+                    class="com.sparkmt.SparkConfigurationAction"
+                    text="Configure Spark Server"
+                    description="Sets up the server configuration for Spark Submit"
+                    icon="/icons/config.svg"/>
+
+            <action id="com.sparkmt.SparkParseAndViewAction"
+                    class="com.sparkmt.SparkParseAndViewAction"
+                    text="Parse and View"
+                    description="Spark command parse and view"
+                    icon="/icons/parse.svg"/>
+
+            <action id="com.sparkmt.SparkSubmitFromCommandAction"
+                    class="com.sparkmt.SparkSubmitFromCommandAction"
+                    text="Paste and Submit"
+                    description="Paste Spark submit command directly and submit"
+                    icon="/icons/paste.svg"/>
+        </group>
+    </actions>
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow factoryClass="com.sparkmt.forms.ToolWindowFactory"
+                    id="HDFS" anchor="bottom" icon="/icons/webHdfs.svg"/>
+        <applicationService serviceImplementation="com.sparkmt.utils.services.SparkConfigPersistService"/>
+    </extensions>
+</idea-plugin>
