@@ -44,7 +44,7 @@
         </group>
     </actions>
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow factoryClass="com.sparkmt.forms.ToolWindowFactory"
+        <toolWindow factoryClass="com.sparkmt.forms.HDFSToolWindowFactory"
                     id="HDFS" anchor="bottom" icon="/icons/webHdfs.svg"/>
         <applicationService serviceImplementation="com.sparkmt.utils.services.SparkConfigPersistService"/>
     </extensions>

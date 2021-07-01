@@ -20,7 +20,8 @@ public class PasteAndSubmitJob extends DialogWrapper {
         super(project);
         this.project = project;
         setTitle("Submit Spark Job");
-        setSize(800, 500);
+        setResizable(false);
+        setOKButtonText("Submit");
         init();
     }
 

@@ -102,16 +102,4 @@ public class HDFSConfigurationForm extends DialogWrapper {
         data.setServerPort(textFieldServerPort.getText().trim());
         data.setConfigurationName(textFieldConfigurationName.getText().trim());
     }
-
-    public boolean isModified(HDFSConfiguration data) {
-        if (textAreaMTToken.getText() != null ? !textAreaMTToken.getText().equals(data.getMtToken()) : data.getMtToken() != null)
-            return true;
-        if (textFieldHDFSLocation.getText() != null ? !textFieldHDFSLocation.getText().equals(data.getHdfsLocation()) : data.getHdfsLocation() != null)
-            return true;
-        if (textFieldServerName.getText() != null ? !textFieldServerName.getText().equals(data.getServerName()) : data.getServerName() != null)
-            return true;
-        if (textFieldServerPort.getText() != null ? !textFieldServerPort.getText().equals(data.getServerPort()) : data.getServerPort() != null)
-            return true;
-        return textFieldConfigurationName.getText() != null ? !textFieldConfigurationName.getText().equals(data.getConfigurationName()) : data.getConfigurationName() != null;
-    }
 }

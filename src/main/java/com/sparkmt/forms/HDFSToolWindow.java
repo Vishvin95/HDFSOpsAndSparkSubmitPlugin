@@ -1,8 +1,12 @@
 package com.sparkmt.forms;
 
 
+import com.intellij.openapi.actionSystem.ActionManager;
+import com.intellij.openapi.actionSystem.ActionToolbar;
+import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.JBPopupMenu;
+import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.treeStructure.Tree;
 import com.sparkmt.beans.HDFSConfiguration;
@@ -44,7 +48,7 @@ public class HDFSToolWindow {
     public ArrayList<Node> getAllHDFSConfigurations(String projectBasePath) {
         ArrayList<Node> hdfsConfigurations = new ArrayList<>();
         String[] hdfsConfigFilenames = ProjectUtils.getFilenamesInDirectory(projectBasePath + "/hdfs-configs");
-        if (hdfsConfigFilenames !=null && hdfsConfigFilenames.length != 0) {
+        if (hdfsConfigFilenames != null && hdfsConfigFilenames.length != 0) {
             Arrays.stream(hdfsConfigFilenames).forEach(hdfsConfigFile -> {
                 try {
                     BeanDeserializer beanDeserializer = new BeanDeserializer(projectBasePath + "/hdfs-configs/" + hdfsConfigFile);
@@ -73,14 +77,12 @@ public class HDFSToolWindow {
         for (int i = 0; i < currentCountOfHDFSConfigurations; i++) {
             DefaultMutableTreeNode child = (DefaultMutableTreeNode) root.getChildAt(i);
             HDFSConfiguration hdfsConfiguration = (HDFSConfiguration) child.getUserObject();
-            if (existingHDFSConfigurations.contains(hdfsConfiguration)) {
-                existingHDFSConfigurations.remove(hdfsConfiguration);
-            }
+            existingHDFSConfigurations.remove(hdfsConfiguration);
         }
 
-        existingHDFSConfigurations.forEach(hdfsConfiguration -> {
+        for (Node hdfsConfiguration : existingHDFSConfigurations) {
             addChildHDFSConfigurationNodes(root, (HDFSConfiguration) hdfsConfiguration);
-        });
+        }
 
         FormUtils.refreshTreeModel(tree1);
     }
@@ -102,9 +104,7 @@ public class HDFSToolWindow {
         tree1 = new Tree(rootNode);
         tree1.setCellRenderer(new DirectoryTreeCellRender());
 
-        getAllHDFSConfigurations(project.getBasePath()).forEach(hdfsConfiguration -> {
-            addChildHDFSConfigurationNodes(rootNode, (HDFSConfiguration) hdfsConfiguration);
-        });
+        getAllHDFSConfigurations(project.getBasePath()).forEach(hdfsConfiguration -> addChildHDFSConfigurationNodes(rootNode, (HDFSConfiguration) hdfsConfiguration));
 
         tree1.addMouseListener(new MouseAdapter() {
             @Override

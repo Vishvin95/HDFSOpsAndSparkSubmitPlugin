@@ -17,9 +17,10 @@ public class ParsedSparkCommandViewer extends DialogWrapper {
 
     public ParsedSparkCommandViewer(boolean canBeParent) {
         super(canBeParent);
+        setTitle("Parse Spark Command to Json");
         setCancelButtonText("Close");
         setOKButtonText("Parse");
-        setSize(800, 400);
+        setResizable(false);
         init();
     }
 
