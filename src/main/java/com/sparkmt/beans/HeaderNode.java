@@ -1,8 +1,9 @@
 package com.sparkmt.beans;
 
 import com.intellij.openapi.ui.JBMenuItem;
+import com.sparkmt.constants.StringConstants;
 import com.sparkmt.forms.DirectoryTreePopupMenu;
-import icons.PluginIcons;
+import com.sparkmt.constants.Icons;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,7 @@ public class HeaderNode implements Node{
     private final String value;
 
     private HeaderNode(){
-        this.value = "HDFS Locations";
+        this.value = StringConstants.HDFS_HEADER_NODE_TEXT;
     }
 
     public static HeaderNode getInstance(){
@@ -25,8 +26,7 @@ public class HeaderNode implements Node{
 
     @Override
     public void populateDirectoryTreePopupMenu(DirectoryTreePopupMenu directoryTreePopupMenu) {
-        JBMenuItem addNewHDFSConfiguration = new JBMenuItem("New HDFS Configuration");
-//        addNewHDFSConfiguration.addActionListener(e -> newHDFSConfigEventHandler(e));
+        JBMenuItem addNewHDFSConfiguration = new JBMenuItem(StringConstants.HDFS_CONFIG_DIALOG_TITLE);
         directoryTreePopupMenu.add(addNewHDFSConfiguration);
     }
 
@@ -34,7 +34,7 @@ public class HeaderNode implements Node{
     public Component getTreeCellRendererComponent(JTree tree, Node node, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         HeaderNode header = (HeaderNode) node;
         JLabel label = new JLabel();
-        label.setIcon(PluginIcons.hdfs);
+        label.setIcon(Icons.hdfs);
         label.setText(header.getValue());
         return label;
     }

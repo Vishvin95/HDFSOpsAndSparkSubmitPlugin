@@ -4,9 +4,11 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.sparkmt.beans.HDFSConfiguration;
 import com.sparkmt.beans.Node;
+import com.sparkmt.constants.StringConstants;
 import com.sparkmt.utils.BeanDeserializer;
 import com.sparkmt.utils.BeanSerializer;
 import com.sparkmt.utils.ProjectUtils;
+import jnr.ffi.Struct;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -31,7 +33,7 @@ public class HDFSConfigurationForm extends DialogWrapper {
     public HDFSConfigurationForm(String projectBasePath) {
         super(true);
         this.projectBasePath = projectBasePath;
-        setTitle("HDFS Configuration Form");
+        setTitle(StringConstants.HDFS_CONFIG_DIALOG_TITLE);
         setResizable(false);
         setSize(400, 550);
         setData(getExistingSettings());
@@ -50,9 +52,9 @@ public class HDFSConfigurationForm extends DialogWrapper {
 
         try {
             String newHdfsConfigFileName = hdfsConfiguration.getConfigurationName().trim().replaceAll("\\s", "_");
-            if (!ProjectUtils.checkFileExists(projectBasePath + "/hdfs-configs"))
-                ProjectUtils.createDirectory(projectBasePath + "/hdfs-configs");
-            BeanSerializer<Node> beanSerializer = new BeanSerializer<>(projectBasePath + "/hdfs-configs/" + newHdfsConfigFileName + ".cfg");
+            if (!ProjectUtils.checkFileExists(projectBasePath + StringConstants.HDFS_CONFIG_PROJECT_SUB_PATH))
+                ProjectUtils.createDirectory(projectBasePath + StringConstants.HDFS_CONFIG_PROJECT_SUB_PATH);
+            BeanSerializer<Node> beanSerializer = new BeanSerializer<>(projectBasePath + StringConstants.HDFS_CONFIG_PROJECT_SUB_PATH + "/" + newHdfsConfigFileName + ".cfg");
             beanSerializer.writeObject(hdfsConfiguration);
 
         } catch (IOException ioException) {
@@ -68,7 +70,7 @@ public class HDFSConfigurationForm extends DialogWrapper {
 
     private HDFSConfiguration getExistingSettings() {
         try {
-            File lastFile = ProjectUtils.getLastFilenameInDirectory(projectBasePath + "/hdfs-configs/");
+            File lastFile = ProjectUtils.getLastFilenameInDirectory(projectBasePath + StringConstants.HDFS_CONFIG_PROJECT_SUB_PATH + "/");
             if (lastFile != null) {
                 BeanDeserializer beanDeserializer = new BeanDeserializer(lastFile.getAbsolutePath());
                 return (HDFSConfiguration) beanDeserializer.getObject();

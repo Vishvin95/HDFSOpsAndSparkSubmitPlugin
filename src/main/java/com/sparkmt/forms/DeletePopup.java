@@ -1,15 +1,19 @@
 package com.sparkmt.forms;
 
+import com.intellij.openapi.project.Project;
 import com.sparkmt.beans.FileType;
 import com.sparkmt.beans.HDFSConfiguration;
 import com.sparkmt.beans.HDFSFile;
 import com.sparkmt.beans.Node;
+import com.sparkmt.constants.StringConstants;
 import com.sparkmt.utils.HDFSUtils;
 import com.sparkmt.utils.ProjectUtils;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class DeletePopup extends JDialog {
     private JPanel contentPane;
@@ -20,11 +24,12 @@ public class DeletePopup extends JDialog {
     private JTree directoryTree;
     private Node userObject;
     private DefaultMutableTreeNode selectedNode;
-    private String projectPath;
+    private Project project;
 
     public DeletePopup() {
         setContentPane(contentPane);
         setModal(true);
+
         getRootPane().setDefaultButton(buttonOK);
 
         buttonOK.addActionListener(e -> onOK());
@@ -41,12 +46,11 @@ public class DeletePopup extends JDialog {
     }
 
     private void onOK() {
-        if(userObject instanceof HDFSFile) {
+        if (userObject instanceof HDFSFile) {
             HDFSFile hdfsFile = (HDFSFile) userObject;
             HDFSUtils.delete(hdfsConfiguration, hdfsFile.getPathSuffix(), hdfsFile.getType() == FileType.DIRECTORY);
-        }
-        else {
-            ProjectUtils.deleteFile(projectPath + "/hdfs-configs/" + hdfsConfiguration.getConfigurationName() + ".cfg");
+        } else {
+            ProjectUtils.deleteFile(project.getBasePath() + "/hdfs-configs/" + hdfsConfiguration.getConfigurationName() + ".cfg");
         }
         selectedNode.removeFromParent();
         FormUtils.refreshTreeModel(directoryTree);
@@ -77,7 +81,7 @@ public class DeletePopup extends JDialog {
         this.selectedNode = selectedNode;
     }
 
-    public void setProjectPath(String projectPath) {
-        this.projectPath = projectPath;
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

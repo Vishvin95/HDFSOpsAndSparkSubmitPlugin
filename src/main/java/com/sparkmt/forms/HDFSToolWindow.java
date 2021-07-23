@@ -1,22 +1,19 @@
 package com.sparkmt.forms;
 
 
-import com.intellij.openapi.actionSystem.ActionManager;
-import com.intellij.openapi.actionSystem.ActionToolbar;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.JBPopupMenu;
-import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.treeStructure.Tree;
 import com.sparkmt.beans.HDFSConfiguration;
 import com.sparkmt.beans.HDFSFile;
 import com.sparkmt.beans.HeaderNode;
 import com.sparkmt.beans.Node;
+import com.sparkmt.constants.StringConstants;
 import com.sparkmt.utils.BeanDeserializer;
 import com.sparkmt.utils.HDFSUtils;
 import com.sparkmt.utils.ProjectUtils;
-import icons.PluginIcons;
+import com.sparkmt.constants.Icons;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -47,11 +44,11 @@ public class HDFSToolWindow {
 
     public ArrayList<Node> getAllHDFSConfigurations(String projectBasePath) {
         ArrayList<Node> hdfsConfigurations = new ArrayList<>();
-        String[] hdfsConfigFilenames = ProjectUtils.getFilenamesInDirectory(projectBasePath + "/hdfs-configs");
+        String[] hdfsConfigFilenames = ProjectUtils.getFilenamesInDirectory(projectBasePath + StringConstants.HDFS_CONFIG_PROJECT_SUB_PATH);
         if (hdfsConfigFilenames != null && hdfsConfigFilenames.length != 0) {
             Arrays.stream(hdfsConfigFilenames).forEach(hdfsConfigFile -> {
                 try {
-                    BeanDeserializer beanDeserializer = new BeanDeserializer(projectBasePath + "/hdfs-configs/" + hdfsConfigFile);
+                    BeanDeserializer beanDeserializer = new BeanDeserializer(projectBasePath + StringConstants.HDFS_CONFIG_PROJECT_SUB_PATH + "/" + hdfsConfigFile);
                     HDFSConfiguration config = (HDFSConfiguration) beanDeserializer.getObject();
                     hdfsConfigurations.add(config);
                 } catch (IOException | ClassNotFoundException exception) {
@@ -64,7 +61,7 @@ public class HDFSToolWindow {
 
     private void createUIComponents() {
         buttonRefresh = new JButton();
-        buttonRefresh.setIcon(PluginIcons.refresh);
+        buttonRefresh.setIcon(Icons.refresh);
         buttonRefresh.addActionListener(e -> refreshDirectoryTree());
 
         generateDirectoryTree();
@@ -89,7 +86,7 @@ public class HDFSToolWindow {
 
     private void addChildHDFSConfigurationNodes(DefaultMutableTreeNode root, HDFSConfiguration hdfsConfiguration) {
         DefaultMutableTreeNode node = new DefaultMutableTreeNode(hdfsConfiguration);
-        ArrayList<HDFSFile> fileStatuses = HDFSUtils.listFiles(hdfsConfiguration, "");
+        ArrayList<HDFSFile> fileStatuses = HDFSUtils.listFiles(hdfsConfiguration, StringConstants.EMPTY_STRING);
         if (fileStatuses != null && !fileStatuses.isEmpty()) {
             fileStatuses.forEach(hdfsFile -> {
                 DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(hdfsFile);
