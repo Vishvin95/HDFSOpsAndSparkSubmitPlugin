@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.sparkmt.beans.SparkJobRequestBody;
+import com.sparkmt.constants.StringConstants;
 import com.sparkmt.utils.SparkCommandParser;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,9 +18,10 @@ public class ParsedSparkCommandViewer extends DialogWrapper {
 
     public ParsedSparkCommandViewer(boolean canBeParent) {
         super(canBeParent);
-        setCancelButtonText("Close");
-        setOKButtonText("Parse");
-        setSize(800, 400);
+        setTitle(StringConstants.SPARK_PARSE_AND_VIEW_DIALOG_TITLE);
+        setCancelButtonText(StringConstants.CLOSE);
+        setOKButtonText(StringConstants.PARSE);
+        setResizable(false);
         init();
     }
 

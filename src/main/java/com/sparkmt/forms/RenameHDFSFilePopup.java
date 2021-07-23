@@ -1,5 +1,6 @@
 package com.sparkmt.forms;
 
+import com.intellij.openapi.project.Project;
 import com.sparkmt.beans.HDFSConfiguration;
 import com.sparkmt.beans.HDFSFile;
 import com.sparkmt.beans.Node;
@@ -17,6 +18,7 @@ public class RenameHDFSFilePopup extends JDialog {
     private String oldFileName;
     private JTree directoryTree;
     private Node userObject;
+    private Project project;
 
     public RenameHDFSFilePopup() {
         setContentPane(contentPane);
@@ -62,5 +64,9 @@ public class RenameHDFSFilePopup extends JDialog {
 
     public void setUserObject(Node userObject) {
         this.userObject = userObject;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

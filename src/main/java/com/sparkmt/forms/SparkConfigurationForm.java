@@ -4,6 +4,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.sparkmt.beans.SparkConfiguration;
+import com.sparkmt.constants.StringConstants;
 import com.sparkmt.utils.services.SparkConfigPersistService;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +30,7 @@ public class SparkConfigurationForm extends DialogWrapper {
         this.project = project;
 
         setData(SparkConfigPersistService.getInstance().getState());
-        setTitle("Configure Spark Submit Server");
+        setTitle(StringConstants.SPARK_CONFIG_DIALOG_TITLE);
         setOKButtonText("Save");
         setSize(500, 400);
         setResizable(false);

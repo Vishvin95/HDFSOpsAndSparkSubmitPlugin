@@ -1,5 +1,6 @@
 package com.sparkmt.forms;
 
+import com.intellij.openapi.project.Project;
 import com.sparkmt.beans.FileType;
 import com.sparkmt.beans.HDFSConfiguration;
 import com.sparkmt.beans.HDFSFile;
@@ -24,6 +25,7 @@ public class UploadFilePopup extends JDialog {
     private HDFSConfiguration hdfsConfiguration;
     private DefaultMutableTreeNode selectedNode;
     private JTree directoryTree;
+    private Project project;
 
     public UploadFilePopup() {
         setContentPane(contentPane);
@@ -86,5 +88,9 @@ public class UploadFilePopup extends JDialog {
 
     private String getFileName(String absoluteFilePath){
         return absoluteFilePath.substring(1 + absoluteFilePath.lastIndexOf("\\"));
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

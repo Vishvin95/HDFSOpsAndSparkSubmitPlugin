@@ -4,6 +4,7 @@ import com.intellij.notification.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.sparkmt.beans.SparkConfiguration;
+import com.sparkmt.constants.StringConstants;
 import com.sparkmt.utils.OperationResponse;
 import com.sparkmt.utils.SparkUtils;
 import com.sparkmt.utils.services.SparkConfigPersistService;
@@ -19,8 +20,9 @@ public class PasteAndSubmitJob extends DialogWrapper {
     public PasteAndSubmitJob(@Nullable Project project) {
         super(project);
         this.project = project;
-        setTitle("Submit Spark Job");
-        setSize(800, 500);
+        setTitle(StringConstants.SPARK_PASTE_AND_SUBMIT_DIALOG_TITLE);
+        setResizable(false);
+        setOKButtonText(StringConstants.SUBMIT);
         init();
     }
 

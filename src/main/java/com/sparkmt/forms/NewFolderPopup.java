@@ -1,5 +1,6 @@
 package com.sparkmt.forms;
 
+import com.intellij.openapi.project.Project;
 import com.sparkmt.beans.FileType;
 import com.sparkmt.beans.HDFSConfiguration;
 import com.sparkmt.beans.HDFSFile;
@@ -18,6 +19,7 @@ public class NewFolderPopup extends JDialog {
     private HDFSConfiguration hdfsConfiguration;
     private DefaultMutableTreeNode selectedNode;
     private JTree directoryTree;
+    private Project project;
 
     public NewFolderPopup() {
         setContentPane(contentPane);
@@ -65,5 +67,9 @@ public class NewFolderPopup extends JDialog {
 
     public void setSelectedNode(DefaultMutableTreeNode selectedNode) {
         this.selectedNode = selectedNode;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

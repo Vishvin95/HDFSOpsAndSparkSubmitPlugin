@@ -1,8 +1,10 @@
 package com.sparkmt.beans;
 
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.JBMenuItem;
+import com.sparkmt.constants.StringConstants;
 import com.sparkmt.forms.*;
-import icons.PluginIcons;
+import com.sparkmt.constants.Icons;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -111,9 +113,9 @@ public class HDFSFile implements Node {
         JLabel label = new JLabel();
         HDFSFile hdfsFile = (HDFSFile) node;
         if (hdfsFile.getType() == FileType.DIRECTORY)
-            label.setIcon(PluginIcons.folder);
+            label.setIcon(Icons.folder);
         else
-            label.setIcon(PluginIcons.file);
+            label.setIcon(Icons.file);
         label.setText(hdfsFile.getPathSuffix());
         return label;
     }
@@ -122,33 +124,33 @@ public class HDFSFile implements Node {
     public void populateDirectoryTreePopupMenu(DirectoryTreePopupMenu directoryTreePopupMenu) {
         HDFSFile hdfsFile = (HDFSFile) directoryTreePopupMenu.getUserObject();
         if (hdfsFile.getType() == FileType.DIRECTORY) {
-            JBMenuItem mkdir = new JBMenuItem("New Folder");
-            JBMenuItem upload = new JBMenuItem("Upload file");
+            JBMenuItem mkdir = new JBMenuItem(StringConstants.MENU_OPTION_NEW_FOLDER);
+            JBMenuItem upload = new JBMenuItem(StringConstants.MENU_OPTION_UPLOAD_FILE);
 
             mkdir.addActionListener(e -> mkdirEventHandler(e, directoryTreePopupMenu.getDirectoryTree(),
-                    directoryTreePopupMenu.getSelectedNode(), directoryTreePopupMenu.getUserObject()));
+                    directoryTreePopupMenu.getSelectedNode(), directoryTreePopupMenu.getUserObject(), directoryTreePopupMenu.getProject()));
             upload.addActionListener(e -> uploadEventHandler(e, directoryTreePopupMenu.getDirectoryTree(),
-                    directoryTreePopupMenu.getSelectedNode(), directoryTreePopupMenu.getUserObject()));
+                    directoryTreePopupMenu.getSelectedNode(), directoryTreePopupMenu.getUserObject(), directoryTreePopupMenu.getProject()));
 
             directoryTreePopupMenu.add(mkdir);
             directoryTreePopupMenu.add(new JSeparator());
             directoryTreePopupMenu.add(upload);
             directoryTreePopupMenu.add(new JSeparator());
         }
-        JBMenuItem rename = new JBMenuItem("Rename");
-        JBMenuItem delete = new JBMenuItem("Delete");
+        JBMenuItem rename = new JBMenuItem(StringConstants.MENU_OPTION_RENAME);
+        JBMenuItem delete = new JBMenuItem(StringConstants.MENU_OPTION_DELETE);
 
         rename.addActionListener(e -> renameEventHandler(e, directoryTreePopupMenu.getDirectoryTree(),
-                directoryTreePopupMenu.getSelectedNode(), directoryTreePopupMenu.getUserObject()));
+                directoryTreePopupMenu.getSelectedNode(), directoryTreePopupMenu.getUserObject(), directoryTreePopupMenu.getProject()));
         delete.addActionListener(e -> deleteEventHandler(e, directoryTreePopupMenu.getDirectoryTree(),
-                directoryTreePopupMenu.getSelectedNode(), directoryTreePopupMenu.getUserObject()));
+                directoryTreePopupMenu.getSelectedNode(), directoryTreePopupMenu.getUserObject(), directoryTreePopupMenu.getProject()));
 
         directoryTreePopupMenu.add(rename);
         directoryTreePopupMenu.add(new JSeparator());
         directoryTreePopupMenu.add(delete);
     }
 
-    private void mkdirEventHandler(ActionEvent e, JTree directoryTree, DefaultMutableTreeNode selectedNode, Node userObject) {
+    private void mkdirEventHandler(ActionEvent e, JTree directoryTree, DefaultMutableTreeNode selectedNode, Node userObject, Project project) {
         HDFSFile hdfsFile = (HDFSFile) userObject;
 
         HDFSConfiguration finalHdfsConfiguration = getRootHDFSConfiguration(selectedNode);
@@ -158,14 +160,15 @@ public class HDFSFile implements Node {
         newFolderPopup.setHdfsConfiguration(finalHdfsConfiguration);
         newFolderPopup.setSelectedNode(selectedNode);
         newFolderPopup.setDirectoryTree(directoryTree);
-        newFolderPopup.setTitle("Create HDFS Directory");
+        newFolderPopup.setProject(project);
+        newFolderPopup.setTitle(StringConstants.MENU_OPTION_NEW_FOLDER);
         newFolderPopup.setLocationByPlatform(true);
         newFolderPopup.setLocation(300, 300);
         newFolderPopup.pack();
         newFolderPopup.setVisible(true);
     }
 
-    private void uploadEventHandler(ActionEvent e, JTree directoryTree, DefaultMutableTreeNode selectedNode, Node userObject) {
+    private void uploadEventHandler(ActionEvent e, JTree directoryTree, DefaultMutableTreeNode selectedNode, Node userObject, Project project) {
         HDFSFile hdfsFile = (HDFSFile) userObject;
 
         HDFSConfiguration finalHdfsConfiguration = getRootHDFSConfiguration(selectedNode);
@@ -175,14 +178,15 @@ public class HDFSFile implements Node {
         uploadFilePopup.setHdfsConfiguration(finalHdfsConfiguration);
         uploadFilePopup.setSelectedNode(selectedNode);
         uploadFilePopup.setDirectoryTree(directoryTree);
-        uploadFilePopup.setTitle("Upload File To HDFS");
+        uploadFilePopup.setProject(project);
+        uploadFilePopup.setTitle(StringConstants.MENU_OPTION_UPLOAD_FILE);
         uploadFilePopup.setLocationByPlatform(true);
         uploadFilePopup.setLocation(300, 300);
         uploadFilePopup.pack();
         uploadFilePopup.setVisible(true);
     }
 
-    private void deleteEventHandler(ActionEvent e, JTree directoryTree, DefaultMutableTreeNode selectedNode, Node userObject) {
+    private void deleteEventHandler(ActionEvent e, JTree directoryTree, DefaultMutableTreeNode selectedNode, Node userObject, Project project) {
         HDFSFile hdfsFile = (HDFSFile) userObject;
 
         // Build a confirmation dialog
@@ -191,28 +195,30 @@ public class HDFSFile implements Node {
         deletePopup.setDirectoryTree(directoryTree);
         deletePopup.setUserObject(userObject);
         deletePopup.setSelectedNode(selectedNode);
+        deletePopup.setProject(project);
 
         if (hdfsFile.getType() == FileType.FILE)
-            deletePopup.setMessage("Do you want to delete the file? " + hdfsFile.getPathSuffix());
+            deletePopup.setMessage(StringConstants.CONFIRM_DELETE_FILE_MSG + hdfsFile.getPathSuffix());
         else
-            deletePopup.setMessage("Folder will be deleted recursively. Do you want to delete the folder? " + hdfsFile.getPathSuffix());
+            deletePopup.setMessage(StringConstants.CONFIRM_DELETE_DIRECTORY_MSG + hdfsFile.getPathSuffix());
 
-        deletePopup.setTitle("Delete HDFS File");
+        deletePopup.setTitle(StringConstants.MENU_OPTION_DELETE);
         deletePopup.setLocationByPlatform(true);
         deletePopup.setLocation(300, 300);
         deletePopup.pack();
         deletePopup.setVisible(true);
     }
 
-    private void renameEventHandler(ActionEvent e, JTree directoryTree, DefaultMutableTreeNode selectedNode, Node userObject) {
+    private void renameEventHandler(ActionEvent e, JTree directoryTree, DefaultMutableTreeNode selectedNode, Node userObject, Project project) {
         HDFSFile hdfsFile = (HDFSFile) userObject;
 
         RenameHDFSFilePopup renameHDFSFilePopup = new RenameHDFSFilePopup();
         renameHDFSFilePopup.setHdfsConfiguration(getRootHDFSConfiguration(selectedNode));
         renameHDFSFilePopup.setOldFileName(hdfsFile.getPathSuffix());
         renameHDFSFilePopup.setDirectoryTree(directoryTree);
+        renameHDFSFilePopup.setProject(project);
         renameHDFSFilePopup.setUserObject(hdfsFile);
-        renameHDFSFilePopup.setTitle("Rename HDFS File");
+        renameHDFSFilePopup.setTitle(StringConstants.MENU_OPTION_RENAME);
         renameHDFSFilePopup.setLocationByPlatform(true);
         renameHDFSFilePopup.setLocation(300, 300);
         renameHDFSFilePopup.pack();

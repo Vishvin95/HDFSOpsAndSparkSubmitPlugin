@@ -1,10 +1,5 @@
 package com.sparkmt.utils;
 
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.project.Project;
-
 import java.io.File;
 
 public class ProjectUtils {
@@ -37,12 +32,6 @@ public class ProjectUtils {
             File directory = new File(path);
             return directory.mkdir();
         }
-    }
-
-    public static Project getCurrentProject(){
-        DataContext dataContext = (DataContext) DataManager.getInstance().getDataContextFromFocusAsync();
-        Project project = (Project) CommonDataKeys.PROJECT.getData(dataContext);
-        return project;
     }
 
     public static boolean deleteFile(String path){
